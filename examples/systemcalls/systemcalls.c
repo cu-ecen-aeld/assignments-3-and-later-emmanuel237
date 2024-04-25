@@ -124,10 +124,12 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     }
     command[count] = NULL;
 
+    command[count] = command[count] ; //remove this
+
     va_end(args);
 
-    if(count < 3 ||  command[0][0] != '/' || command[2][0] != '/')
-        return false;
+    //if(count < 3 ||  command[0][0] != '/' || command[2][0] != '/')
+     //   return false;
   
 /*
  * TODO
@@ -157,12 +159,13 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     }
     else if(pid == 0)
     {
-        if(dup2(fd, 1) < 0 ){
+       if(dup2(fd, 1) < 0 ){
             perror("dup2");
             close(fd);
             exit(-1);
         }
-        execv(command[0], &command[1]);
+        execv(command[0], command);
+        
         exit(-1);
     }
 
