@@ -12,7 +12,7 @@
 #include <syslog.h>
 #include <signal.h>
 
-#define BUFFER_SIZE 1024  
+#define BUFFER_SIZE 20480
 #define SERVER_PORT "9000"
 
 inline static bool isValidSocket(const int fd)
@@ -36,9 +36,14 @@ static void signal_handler( int signal_number )
 int main(int argc, char* argv[] )
 {
     const char *app_name;
-    if(argc > 0 )
+    bool is_deamon = false;
+     app_name = argv[0] + 2;
+    if(argc >=2  )
     {
-        app_name = argv[0] + 2;
+        if( strcmp(argv[1], "-d") == 0 )
+        {
+            is_deamon = true;
+        }
     }
     openlog(app_name, LOG_PID | LOG_CONS, LOG_USER );    
 
@@ -95,8 +100,23 @@ int main(int argc, char* argv[] )
         fprintf(stderr, "bind() failled. errno (%d)\n",errno);
         return -1;
     }
-
     freeaddrinfo(bind_address);
+    //Starting the deamon
+    if(is_deamon)
+    {
+        pid_t pid = fork();
+        if(pid < 0 )
+        {
+            fprintf(stderr, "Error starting the deamon\n");
+            return -1;
+        }
+        if(pid > 0 )
+        {
+            //deamon created exit the main process.
+            return 0;
+        }
+    }
+
     if( listen(socket_listen, 1) < 0  )
     {
         fprintf(stderr, "listen() failled . errno : (%d)\n",errno);
