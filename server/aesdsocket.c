@@ -80,7 +80,7 @@ void *tcpConnectionHandler(void *thread_args)
             free(buffer);
             buffer = NULL;
             free(thread_data);
-            pthread_exit(NULL);
+            return;
         }
 
         rcvd_bytes_counter = rcvd_bytes_counter + bytes_rcvd;
@@ -125,7 +125,7 @@ void *tcpConnectionHandler(void *thread_args)
         close(thread_data->socket_fd);
         //fclose(thread_data->file_ptr); 
         free(thread_data);
-        pthread_exit(NULL);
+        return;
     }
     char *text_buffer = (char *)malloc(BUF_CHUNCK_SIZE * sizeof(char));
     memset(text_buffer, '\0', BUF_CHUNCK_SIZE);
@@ -149,7 +149,7 @@ void *tcpConnectionHandler(void *thread_args)
                 //fclose( thread_data->file_ptr);
                 free(text_buffer);
                 free(thread_data);
-                pthread_exit(NULL);
+                return;
             }
         }
         
@@ -166,7 +166,7 @@ void *tcpConnectionHandler(void *thread_args)
     close(thread_data->socket_fd);
     syslog(LOG_INFO, "Closed connection from %s", thread_data->client_name);
     free(thread_data);
-    pthread_exit(NULL);
+    return;
 }
 
 void *timerHandler(void *thread_args)
@@ -195,7 +195,7 @@ void *timerHandler(void *thread_args)
 
         if(signal_termination_rcvd == true )
         {
-            pthread_exit(NULL);
+            return;
         }
     }
 }
