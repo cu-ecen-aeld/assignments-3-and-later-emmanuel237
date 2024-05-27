@@ -129,7 +129,7 @@ void *tcpConnectionHandler(void *thread_args)
     }
     char *text_buffer = (char *)malloc(BUF_CHUNCK_SIZE * sizeof(char));
     memset(text_buffer, '\0', BUF_CHUNCK_SIZE);
-    char ch='\0';
+    int ch='\0';
     int char_counter = 0;
     do
     {
