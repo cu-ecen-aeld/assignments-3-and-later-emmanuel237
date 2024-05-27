@@ -1,8 +1,8 @@
 # Compiler settings
-#CC := gcc
-CFLAGS := -Wall  -Werror -Wextra -g
-LDFLAGS := -pthread -lrt
-TARGET := aesdsocket
+#CC ?= gcc
+CFLAGS ?= -Wall  -Werror -Wextra -g
+LDFLAGS ?= -pthread -lrt
+TARGET ?= aesdsocket
 SRCS := aesdsocket.c
 OBJS := $(SRCS:.c=.o)
 
